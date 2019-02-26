@@ -1,0 +1,96 @@
+##################################################################################################
+# web server
+##################################################################################################
+apiVersion: v1
+kind: Service
+metadata:
+  name: webserver
+  labels:
+    app: webserver
+spec:
+  ports:
+  - port: 9080
+    name: http
+  selector:
+    app: webserver
+---
+apiVersion: extensions/v1beta1
+kind: Deployment
+metadata:
+  name: webserver-v1
+spec:
+  replicas: 3
+  minReadySeconds: 5
+  strategy:
+      rollingUpdate:
+        maxSurge: 1
+        maxUnavailable: 0
+      type: RollingUpdate
+  template:
+    metadata:
+      labels:
+        app: webserver
+        version: v1
+    spec:
+      containers:
+      - name: webserver
+        image: gcr.io/_PROJECT_ID/webserver:blue
+        imagePullPolicy: Always
+        ports:
+        - containerPort: 9080
+        #following required to suport rolling updates without downtime for clients
+        readinessProbe:
+          httpGet:
+             path: /webserver
+             port: 9080
+          initialDelaySeconds: 5
+          periodSeconds: 5
+          successThreshold: 1
+---
+apiVersion: extensions/v1beta1
+kind: Deployment
+metadata:
+  name: webserver-v2
+spec:
+  replicas: 3
+  minReadySeconds: 5
+  strategy:
+      rollingUpdate:
+        maxSurge: 1
+        maxUnavailable: 0
+      type: RollingUpdate
+  template:
+    metadata:
+      labels:
+        app: webserver
+        version: v2
+    spec:
+      containers:
+      - name: webserver
+        image: gcr.io/_PROJECT_ID/webserver:yellow
+        imagePullPolicy: Always
+        ports:
+        - containerPort: 9080
+        #following required to suport rolling updates without downtime for clients
+        readinessProbe:
+          httpGet:
+             path: /webserver
+             port: 9080
+          initialDelaySeconds: 5
+          periodSeconds: 5
+          successThreshold: 1
+---
+apiVersion: networking.istio.io/v1alpha3
+kind: DestinationRule
+metadata:
+  name: webserver
+spec:
+  host: webserver
+  subsets:
+  - name: v1
+    labels:
+      version: v1
+  - name: v2
+    labels:
+      version: v2
+---

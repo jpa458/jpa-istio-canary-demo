@@ -1,0 +1,6 @@
+#!/bin/bash
+
+PROJECT_ID=$(gcloud info --format='value(config.project)')
+
+GKE_CLUSTER=jpa-istio-canry-demo
+ZONE=europe-west4-a
