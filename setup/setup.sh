@@ -41,7 +41,6 @@ wget -qO- https://github.com/istio/istio/releases/download/1.0.3/istio-1.0.3-lin
 cd istio-1.0.3
 kubectl apply -f install/kubernetes/istio-demo.yaml
 kubectl label namespace default istio-injection=enabled
-
 cd ..
 
 bold "Building blue container image..."
@@ -53,7 +52,7 @@ sed -i "s/blue/yellow/g" ../webserver/server.js
 gcloud builds submit --config cloud-build-image.yaml \
   --substitutions=_COLOUR=yellow ../webserver
 
-bold "Patching manifests..."
+bold "Patching files with correct project id..."
 sed -i "s/\/_PROJECT_ID/\/$PROJECT_ID/g" ./deployment.yaml
 
 #bold "Starting deployments..."
@@ -62,13 +61,14 @@ kubectl apply -f gateway.yaml
 kubectl apply -f routing-canary-20-yellow.yaml
 
 bold "Deployment complete!"
-
 SERVICE_IP_ADDRESS=`kubectl -n istio-system get service istio-ingressgateway -o jsonpath={.status..ingress[0].ip}`
 bold "API Endpoint: http://$SERVICE_IP_ADDRESS/webserver"
 
 bold "Starting local webserver to visualise routing rules..."
 cd ../localTestServer
+#set the ip address to the public ingress gateway IP address
 sed -i "s/SERVICE_IP_ADDRESS/$SERVICE_IP_ADDRESS/g" ./demo.html
 npm install
 node server.js &
 bold "Open web preview on port 8080 from cloud console to visualise the routing to blue and yellow versions."
+bold "You will need to enable the loading of unsafe scripts becuase web preview uses HTTPS and we have not set an HTTPS enabled ingress gateway - TODO :)."
