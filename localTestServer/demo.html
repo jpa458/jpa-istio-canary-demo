@@ -2,7 +2,7 @@
 <html>
 <head>
 <meta charset="UTF-8">
-<title>Istio Demo</title>
+<title>Istio Canary Release Demo</title>
 </head>
 
 <body id="body">
@@ -16,10 +16,10 @@ function reloadIFrames() {
 }
 
 window.onload = function () {
-  #var ip = "<YOUR_IP_ADDRESS>", bodyElement = document.getElementById("body");
+  var ip = "SERVICE_IP_ADDRESS", bodyElement = document.getElementById("body");
   for (var i = 0; i < 100; i++) {
       var iframe = document.createElement('iframe');
-      iframe.src = "/webserver";
+      iframe.src = "http://" + ip + "/webserver";
       iframe.width = "100px";
       iframe.height = "100px";
       bodyElement.appendChild(iframe);

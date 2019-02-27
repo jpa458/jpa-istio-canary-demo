@@ -6,7 +6,7 @@ spec:
   hosts:
   - "*"
   gateways:
-  - jpa-istio-demo-gateway
+  - jpa-istio-canary-demo-gateway
   http:
   - match:
     - uri:

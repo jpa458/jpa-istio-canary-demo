@@ -1,7 +1,7 @@
 {
-  "name": "webserver",
+  "name": "test_server",
   "version": "1.0.0",
-  "description": "webserver app deployed into kubernetes",
+  "description": "Test server to visualise canary release deployment",
   "main": "server.js",
   "scripts": {
     "start": "node server.js"

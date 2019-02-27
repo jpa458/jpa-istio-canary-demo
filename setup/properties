@@ -2,5 +2,5 @@
 
 PROJECT_ID=$(gcloud info --format='value(config.project)')
 
-GKE_CLUSTER=jpa-istio-canry-demo
+GKE_CLUSTER=jpa-istio-canary-demo
 ZONE=europe-west4-a

@@ -18,8 +18,9 @@ fi
 
 bold "Starting the setup process in project $PROJECT_ID..."
 
-bold "Enabling APIs..."
+bold "Enabling Container APIs..."
 gcloud services enable container.googleapis.com
+bold "Enabling Cloud Build APIs..."
 gcloud services enable cloudbuild.googleapis.com
 
 bold "Creating cluster..."
@@ -35,7 +36,7 @@ kubectl create clusterrolebinding cluster-admin-binding \
  --clusterrole=cluster-admin \
  --user=$(gcloud config get-value core/account)
 
-bold "Installing SRE stack..."
+bold "Installing Istio..."
 wget -qO- https://github.com/istio/istio/releases/download/1.0.3/istio-1.0.3-linux.tar.gz | tar xvz
 cd istio-1.0.3
 kubectl apply -f install/kubernetes/istio-demo.yaml
@@ -45,12 +46,12 @@ cd ..
 
 bold "Building blue container image..."
 gcloud builds submit --config cloud-build-image.yaml \
-  --substitutions=_COLOUR=blue .
+  --substitutions=_COLOUR=blue ../webserver
 
 bold "Building yellow container image..."
 sed -i "s/blue/yellow/g" ../webserver/server.js
 gcloud builds submit --config cloud-build-image.yaml \
-  --substitutions=_COLOUR=yellow .
+  --substitutions=_COLOUR=yellow ../webserver
 
 bold "Patching manifests..."
 sed -i "s/\/_PROJECT_ID/\/$PROJECT_ID/g" ./deployment.yaml
@@ -61,5 +62,13 @@ kubectl apply -f gateway.yaml
 kubectl apply -f routing-canary-20-yellow.yaml
 
 bold "Deployment complete!"
-#bold "Application url: http://storage.googleapis.com/$PROJECT_ID.appspot.com/coolretailer/ux.html"
-#bold "API Endpoint: http://`kubectl -n istio-system get service istio-ingressgateway -o jsonpath={.status.loadBalancer.ingress[0].ip}|tail -1`/api/fetchProducts?name=go"
+
+SERVICE_IP_ADDRESS=`kubectl -n istio-system get service istio-ingressgateway -o jsonpath={.status..ingress[0].ip}`
+bold "API Endpoint: http://$SERVICE_IP_ADDRESS/webserver"
+
+bold "Starting local webserver to visualise routing rules..."
+cd ../localTestServer
+sed -i "s/SERVICE_IP_ADDRESS/$SERVICE_IP_ADDRESS/g" ./demo.html
+npm install
+node server.js &
+bold "Open web preview on port 8080 from cloud console to visualise the routing to blue and yellow versions."
