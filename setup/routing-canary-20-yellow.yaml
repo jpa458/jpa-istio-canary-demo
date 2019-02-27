@@ -8,10 +8,7 @@ spec:
   gateways:
   - jpa-istio-canary-demo-gateway
   http:
-  - match:
-    - uri:
-        exact: /webserver
-    route:
+  - route:
     - destination:
         host: webserver
         subset: v1

@@ -62,7 +62,7 @@ kubectl apply -f routing-canary-20-yellow.yaml
 
 bold "Deployment complete!"
 SERVICE_IP_ADDRESS=`kubectl -n istio-system get service istio-ingressgateway -o jsonpath={.status..ingress[0].ip}`
-bold "API Endpoint: http://$SERVICE_IP_ADDRESS/webserver"
+bold "API Endpoint: http://$SERVICE_IP_ADDRESS/"
 
 bold "Starting local webserver to visualise routing rules..."
 cd ../localTestServer

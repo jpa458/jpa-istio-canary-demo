@@ -41,7 +41,7 @@ spec:
         #following required to suport rolling updates without downtime for clients
         readinessProbe:
           httpGet:
-             path: /webserver
+             path: /
              port: 9080
           initialDelaySeconds: 5
           periodSeconds: 5
@@ -74,7 +74,7 @@ spec:
         #following required to suport rolling updates without downtime for clients
         readinessProbe:
           httpGet:
-             path: /webserver
+             path: /
              port: 9080
           initialDelaySeconds: 5
           periodSeconds: 5

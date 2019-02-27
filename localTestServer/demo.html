@@ -19,7 +19,7 @@ window.onload = function () {
   var ip = "SERVICE_IP_ADDRESS", bodyElement = document.getElementById("body");
   for (var i = 0; i < 100; i++) {
       var iframe = document.createElement('iframe');
-      iframe.src = "http://" + ip + "/webserver";
+      iframe.src = "http://" + ip + "/";
       iframe.width = "100px";
       iframe.height = "100px";
       bodyElement.appendChild(iframe);
