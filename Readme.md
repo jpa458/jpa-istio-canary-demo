@@ -28,6 +28,8 @@ cd ../updateVersion
 ./updateVersion.sh
 ```
 
+* Cleanup by deleting your project!
+
 ## Disclaimer
 * This is not an officially supported Google repo/product.
 * This is a 101 intro to concepts allowing me to run demos.
