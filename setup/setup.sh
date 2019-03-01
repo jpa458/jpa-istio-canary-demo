@@ -37,8 +37,8 @@ kubectl create clusterrolebinding cluster-admin-binding \
  --user=$(gcloud config get-value core/account)
 
 bold "Installing Istio..."
-wget -qO- https://github.com/istio/istio/releases/download/1.0.3/istio-1.0.3-linux.tar.gz | tar xvz
-cd istio-1.0.3
+wget -qO- https://github.com/istio/istio/releases/download/1.1.0-rc.1/istio-1.1.0-rc.1-linux.tar.gz | tar xvz
+cd istio-1.1.0-rc.1
 kubectl apply -f install/kubernetes/istio-demo.yaml
 kubectl label namespace default istio-injection=enabled
 cd ..
