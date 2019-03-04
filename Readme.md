@@ -5,6 +5,9 @@ A demo project for a 101 Kubernetes/Istio demo on the Google Cloud Platform.
 In this demo we focus on canary releases and routing requests to different versions of a webservice.
 A test server running from Cloud Shell allows you to visualise the different versions and watch a new version rollout in real time.
 
+## Screenshot
+![Screenshot](https://github.com/jpa458/jpa-istio-canary-demo/blob/master/istio-canary-release.png)
+
 ## Setup Instructions
 * Create a GCP project and open Cloud Shell. Make sure your project is selected :
 
